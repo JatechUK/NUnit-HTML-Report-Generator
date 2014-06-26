@@ -5,6 +5,7 @@ This project is used to convert NUnit generated XML result files into a self-con
 
 ##Example
 [Click here to view the example output](http://htmlpreview.github.io/?https://github.com/JatechUK/NUnit-HTML-Report-Generator/blob/master/ExampleResults.html)
+[Click here to see the input that generated the output](https://raw.githubusercontent.com/JatechUK/NUnit-HTML-Report-Generator/master/NUnit%20HTML%20Report%20Generator/ExampleResults.xml)
 
 ##Building 
 1. Open in Visual Studio 2012
@@ -17,4 +18,4 @@ Included in the project is an example NUnit XML results file originally found at
 NUnitHTMLReportGenerator.exe [input-path] [output-path]
 
 ##Disclaimer
-This project is maintained by [Luke Browning]((http://github.com/luke-browning) on behalf of [Jatech]((http://github.com/JatechUK) and is released under the [GPLv2.0](https://raw.githubusercontent.com/JatechUK/NUnit-HTML-Report-Generator/master/LICENSE).
+This project is maintained by [Luke Browning](http://github.com/luke-browning) on behalf of [Jatech](http://github.com/JatechUK) and is released under the [GPLv2.0](https://raw.githubusercontent.com/JatechUK/NUnit-HTML-Report-Generator/master/LICENSE).

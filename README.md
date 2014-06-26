@@ -14,7 +14,8 @@ This project is used to convert NUnit generated XML result files into a self-con
 Included in the project is an example NUnit XML results file originally found at [vincentp-tests playground](https://github.com/vincentp-test/playground/blob/master/test-results.xml). The project has a debug command line arguement set in the project settings that will pass the filename of the example file into the software to generate a HTML file. Clicking the Start Debugging/F5 button in visual studio will run the software and generate a HTML file based on the example XML file. The output file will be found in the same directory as your executable (bin).
 
 ##Usage
-NUnitHTMLReportGenerator.exe [input-path] [output-path]
+The application can be called from the command line as follows:  
+`NUnitHTMLReportGenerator.exe [input-path] [output-path]`
 
 ##Disclaimer
 This project is maintained by [Luke Browning](http://github.com/luke-browning) on behalf of [Jatech](http://github.com/JatechUK) and is released under the [GPLv2.0](https://raw.githubusercontent.com/JatechUK/NUnit-HTML-Report-Generator/master/LICENSE).

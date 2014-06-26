@@ -4,8 +4,8 @@ NUnit HTML Report Generator
 This project is used to convert NUnit generated XML result files into a self-contained Bootstrap based HTML page.
 
 ##Example
-[Click here to view the example output](http://htmlpreview.github.io/?https://github.com/JatechUK/NUnit-HTML-Report-Generator/blob/master/ExampleResults.html)
-[Click here to see the input that generated the output](https://raw.githubusercontent.com/JatechUK/NUnit-HTML-Report-Generator/master/NUnit%20HTML%20Report%20Generator/ExampleResults.xml)
+* [Click here to view the example output](http://htmlpreview.github.io/?https://github.com/JatechUK/NUnit-HTML-Report-Generator/blob/master/ExampleResults.html)
+* [Click here to see the input that generated the output](https://raw.githubusercontent.com/JatechUK/NUnit-HTML-Report-Generator/master/NUnit%20HTML%20Report%20Generator/ExampleResults.xml)
 
 ##Building 
 1. Open in Visual Studio 2012

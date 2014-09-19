@@ -155,7 +155,25 @@ namespace Jatech.NUnit
                 Console.WriteLine("File does not exist");
             }
 
+            if (ok)
+            {
+                CreateFolder(output);
+            }
+
             return ok;
+        }
+
+        /// <summary>
+        /// Creates the folder of a file path if it doesn't exist
+        /// </summary>
+        /// <param name="filePath">The path to the file</param>
+        private static void CreateFolder(string folderPath)
+        {
+            string fullPath = Path.GetFullPath(folderPath);
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
         }
 
         #endregion

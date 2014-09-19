@@ -483,8 +483,18 @@ namespace Jatech.NUnit
                 name = testCase.Attribute("name").Value;
                 result = testCase.Attribute("result").Value;
 
-                // Remove namespace if included
-                name = name.Substring(name.LastIndexOf('.') + 1, name.Length - name.LastIndexOf('.') - 1);
+                // Remove namespace if included, which is all text before the last point, the last point being before any parenthesis (for the test cases)
+                int parenthesisPosition = name.LastIndexOf('(');
+                if (parenthesisPosition >= 0)
+                {
+                    parenthesisPosition = parenthesisPosition - 1;
+                }
+                else
+                {
+                    parenthesisPosition = name.Length - 1;
+                }
+
+                name = name.Substring(name.LastIndexOf('.', parenthesisPosition) + 1, name.Length - name.LastIndexOf('.', parenthesisPosition) - 1);
 
                 html.AppendLine("<div class=\"panel ");
 

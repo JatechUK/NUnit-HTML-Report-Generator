@@ -1,4 +1,4 @@
-﻿#region File Header
+#region File Header
 // <copyright application="NUnit HTML Report Generator" file="Program.cs" company="Jatech Limited">
 // Copyright (c) 2014 Jatech Limited. All rights reserved.
 // 
@@ -45,7 +45,7 @@ namespace Jatech.NUnit
         /// <summary>
         /// Usage example.
         /// </summary>
-        private const string Usage = "Usage: NUnitHTMLReportGenerator.exe [input-path] [output-path]";
+        private const string Usage = "Usage: NUnitHTMLReportGenerator.exe [input-path] [output-path] [failure-details-only]";
 
         /// <summary>
         /// Regular expression for acceptable characters in html id.
@@ -70,6 +70,7 @@ namespace Jatech.NUnit
             StringBuilder html = new StringBuilder();
             bool ok = false;
             string input = string.Empty, output = string.Empty;
+            bool failuresOnlyFlag= false;
 
             if (args.Length == 1)
             {
@@ -101,6 +102,18 @@ namespace Jatech.NUnit
                 // Check input file exists and output file doesn't
                 ok = CheckInputAndOutputFile(input, output);
             }
+            else if(args.Length==3)
+            {
+                // If three parameters are passed, assume the first is 
+                // the input path and the second the output path
+                // third is errors only flag
+                input = args[0];
+                output = args[1];
+                failuresOnlyFlag=!string.IsNullOrEmpty(args[2]);
+
+                // Check input file exists and output file doesn't
+                ok = CheckInputAndOutputFile(input, output);
+            }
             else
             {
                 // Display the usage message
@@ -112,7 +125,7 @@ namespace Jatech.NUnit
             {
                 // Generate the HTML page
                 html.Append(GetHTML5Header("Results"));
-                html.Append(ProcessFile(input));
+                html.Append(ProcessFile(input,failuresOnlyFlag));
                 html.Append(GetHTML5Footer());
 
                 // Save HTML to the output file
@@ -169,7 +182,7 @@ namespace Jatech.NUnit
         /// <returns>
         /// HTML page content.
         /// </returns>
-        private static string ProcessFile(string file)
+        private static string ProcessFile(string file, bool failuresOnlyFlag)
         {
             StringBuilder html = new StringBuilder();
             XElement doc = XElement.Load(file);
@@ -224,7 +237,7 @@ namespace Jatech.NUnit
             html.AppendLine("</div>");
 
             // Process test fixtures
-            html.Append(ProcessFixtures(doc.Descendants("test-suite").Where(x => x.Attribute("type").Value == "TestFixture")));
+            html.Append(ProcessFixtures(doc.Descendants("test-suite").Where(x => x.Attribute("type").Value == "TestFixture"),failuresOnlyFlag));
 
             // End container
             html.AppendLine("</div>");
@@ -240,7 +253,7 @@ namespace Jatech.NUnit
         /// <returns>
         /// Fixtures as HTML.
         /// </returns>
-        private static string ProcessFixtures(IEnumerable<XElement> fixtures)
+        private static string ProcessFixtures(IEnumerable<XElement> fixtures, bool failuresOnlyFlag)
         {
             StringBuilder html = new StringBuilder();
             int index = 0;
@@ -336,7 +349,7 @@ namespace Jatech.NUnit
 
                 // Generate the modal dialog that will be shown
                 // if the user clicks on the test-fixtures
-                html.AppendLine(GenerateFixtureModal(fixture, modalId, fixtureName, fixtureReason));
+                html.AppendLine(GenerateFixtureModal(fixture, modalId, fixtureName, fixtureReason,failuresOnlyFlag));
 
                 html.AppendLine("</div>");
                 html.AppendLine("</div>");
@@ -453,7 +466,7 @@ namespace Jatech.NUnit
         /// <returns>
         /// The dialogs HTML.
         /// </returns>
-        private static string GenerateFixtureModal(XElement fixture, string modalId, string title, string warningMessage)
+        private static string GenerateFixtureModal(XElement fixture, string modalId, string title, string warningMessage, bool failuresOnlyFlag)
         {
             StringBuilder html = new StringBuilder();
 
@@ -477,13 +490,21 @@ namespace Jatech.NUnit
 
             // Add each test case to the dialog, colour 
             // coded based on the result
-            foreach (var testCase in fixture.Descendants("test-case"))
+            var testcasesToInclude=fixture.Descendants("test-case");
+            
+            if(failuresOnlyFlag)
             {
+            testcasesToInclude=fixture.Descendants("test-case").Where(t => t.Attribute("result").Value.ToLower() == "failure");
+            }
+            
+            foreach (var testCase in testcasesToInclude)
+            {
+
                 // Get properties
                 name = testCase.Attribute("name").Value;
                 result = testCase.Attribute("result").Value;
 
-                // Remove namespace if included
+                 // Remove namespace if included
                 name = name.Substring(name.LastIndexOf('.') + 1, name.Length - name.LastIndexOf('.') - 1);
 
                 html.AppendLine("<div class=\"panel ");
@@ -539,6 +560,7 @@ namespace Jatech.NUnit
 
             return html.ToString();
         }
+
 
         #region HTML5 Template
 

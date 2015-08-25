@@ -494,7 +494,7 @@ namespace Jatech.NUnit
             
             if(failuresOnlyFlag)
             {
-            testcasesToInclude=fixture.Descendants("test-case").Where(t => t.Attribute("result").Value.ToLower() == "failure");
+            testcasesToInclude=fixture.Descendants("test-case").Where(t => t.Attribute("result").Value.ToLower() == "failure"  || t.Attribute("result").Value.ToLower() == "error");
             }
             
             foreach (var testCase in testcasesToInclude)

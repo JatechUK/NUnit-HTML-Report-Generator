@@ -176,14 +176,14 @@ namespace Jatech.NUnit
 
             // Load summary values
             string testName = doc.Attribute("name").Value;
-            int testTests = int.Parse(!string.IsNullOrEmpty(doc.Attribute("total").Value) ? doc.Attribute("total").Value : "0");
-            int testErrors = int.Parse(!string.IsNullOrEmpty(doc.Attribute("errors").Value) ? doc.Attribute("errors").Value : "0");
-            int testFailures = int.Parse(!string.IsNullOrEmpty(doc.Attribute("failures").Value) ? doc.Attribute("failures").Value : "0");
-            int testNotRun = int.Parse(!string.IsNullOrEmpty(doc.Attribute("not-run").Value) ? doc.Attribute("not-run").Value : "0");
-            int testInconclusive = int.Parse(!string.IsNullOrEmpty(doc.Attribute("inconclusive").Value) ? doc.Attribute("inconclusive").Value : "0");
-            int testIgnored = int.Parse(!string.IsNullOrEmpty(doc.Attribute("ignored").Value) ? doc.Attribute("ignored").Value : "0");
-            int testSkipped = int.Parse(!string.IsNullOrEmpty(doc.Attribute("skipped").Value) ? doc.Attribute("skipped").Value : "0");
-            int testInvalid = int.Parse(!string.IsNullOrEmpty(doc.Attribute("invalid").Value) ? doc.Attribute("invalid").Value : "0");
+            int testTests = doc.Attribute("total") == null ? 0 : int.Parse(!string.IsNullOrEmpty(doc.Attribute("total").Value) ? doc.Attribute("total").Value : "0");
+            int testErrors = doc.Attribute("errors") == null ? 0 : int.Parse(!string.IsNullOrEmpty(doc.Attribute("errors").Value) ? doc.Attribute("errors").Value : "0");
+            int testFailures = doc.Attribute("failures") == null ? 0 : int.Parse(!string.IsNullOrEmpty(doc.Attribute("failures").Value) ? doc.Attribute("failures").Value : "0");
+            int testNotRun = doc.Attribute("not-run") == null ? 0 : int.Parse(!string.IsNullOrEmpty(doc.Attribute("not-run").Value) ? doc.Attribute("not-run").Value : "0");
+            int testInconclusive = doc.Attribute("inconclusive") == null ? 0 : int.Parse(!string.IsNullOrEmpty(doc.Attribute("inconclusive").Value) ? doc.Attribute("inconclusive").Value : "0");
+            int testIgnored = doc.Attribute("ignored") == null ? 0 : int.Parse(!string.IsNullOrEmpty(doc.Attribute("ignored").Value) ? doc.Attribute("ignored").Value : "0");
+            int testSkipped = doc.Attribute("skipped") == null ? 0 : int.Parse(!string.IsNullOrEmpty(doc.Attribute("skipped").Value) ? doc.Attribute("skipped").Value : "0");
+            int testInvalid = doc.Attribute("invalid") == null ? 0 : int.Parse(!string.IsNullOrEmpty(doc.Attribute("invalid").Value) ? doc.Attribute("invalid").Value : "0");
             DateTime testDate = DateTime.Parse(string.Format("{0} {1}", doc.Attribute("date").Value, doc.Attribute("time").Value));
             string testPlatform = doc.Element("environment").Attribute("platform").Value;
 
@@ -224,7 +224,7 @@ namespace Jatech.NUnit
             html.AppendLine("</div>");
 
             // Process test fixtures
-            html.Append(ProcessFixtures(doc.Descendants("test-suite").Where(x => x.Attribute("type").Value == "TestFixture")));
+            html.Append(ProcessFixtures(doc.Descendants("test-suite").Where(x => x.Attribute("type") != null && x.Attribute("type").Value == "TestFixture")));
 
             // End container
             html.AppendLine("</div>");

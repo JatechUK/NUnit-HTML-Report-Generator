@@ -24,6 +24,8 @@
 // </summary>
 #endregion
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -69,96 +71,35 @@ namespace Jatech.NUnit
         {
             StringBuilder html = new StringBuilder();
             bool ok = false;
-            string input = string.Empty, output = string.Empty;
 
-            if (args.Length == 1)
+            Options options = new Options();
+
+            if(!CommandLine.Parser.Default.ParseArguments(args,options))
             {
-                input = args[0];
-
-                // Check if the user wants help, otherwise assume its a
-                // filename that needs to be processed
-                if (HelpParameters.Contains(input))
-                {
-                    Console.WriteLine(Usage);
-                }
-                else
-                {
-                    // Output file with the same name in the same folder
-                    // with a html extension
-                    output = Path.ChangeExtension(input, "html");
-
-                    // Check input file exists and output file doesn't
-                    ok = CheckInputAndOutputFile(input, output);
-                }
+                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
             }
-            else if (args.Length == 2)
-            {
-                // If two parameters are passed, assume the first is 
-                // the input path and the second the output path
-                input = args[0];
-                output = args[1];
 
-                // Check input file exists and output file doesn't
-                ok = CheckInputAndOutputFile(input, output);
-            }
-            else
+            if(options.Output == null)
             {
-                // Display the usage message
-                Console.WriteLine(Usage);
+                options.Output = Path.GetDirectoryName(options.Input) + "\\" + Path.GetFileNameWithoutExtension(options.Input) + ".html";
             }
 
             // If input file exists and output doesn't exist
-            if (ok)
+            if (File.Exists(options.Input))
             {
                 // Generate the HTML page
                 html.Append(GetHTML5Header("Results"));
-                html.Append(ProcessFile(input));
+                html.Append(ProcessFile(options.Input,options.Summary));
                 html.Append(GetHTML5Footer());
 
                 // Save HTML to the output file
-                File.WriteAllText(output, html.ToString());
+                File.WriteAllText(options.Output, html.ToString());
             }
         }
 
         #endregion
 
         #region Private Methods
-
-        #region File Access
-
-        /// <summary>
-        /// Check input and output file existence
-        /// Input file should exist, output file should not
-        /// </summary>
-        /// <param name="input">The input file name</param>
-        /// <param name="output">The output name</param>
-        /// <returns>
-        /// true if it succeeds, false if it fails.
-        /// </returns>
-        private static bool CheckInputAndOutputFile(string input, string output)
-        {
-            bool ok = false;
-
-            if (File.Exists(input))
-            {
-                if (!File.Exists(output))
-                {
-                    ok = true;
-                }
-                else
-                {
-                    Console.WriteLine(string.Format("Output file '{0}' already exists", output));
-                }
-            }
-            else
-            {
-                Console.WriteLine("File does not exist");
-            }
-
-            return ok;
-        }
-
-        #endregion
 
         #region Processing
 
@@ -169,7 +110,7 @@ namespace Jatech.NUnit
         /// <returns>
         /// HTML page content.
         /// </returns>
-        private static string ProcessFile(string file)
+        private static string ProcessFile(string file,string summery)
         {
             StringBuilder html = new StringBuilder();
             XElement doc = XElement.Load(file);
@@ -202,7 +143,19 @@ namespace Jatech.NUnit
             html.AppendLine("<div class=\"row\">");
             html.AppendLine("<div class=\"col-md-12\">");
             html.AppendLine("<div class=\"panel panel-default\">");
-            html.AppendLine(string.Format("<div class=\"panel-heading\">Summary - <small>{0}</small></div>", testName));
+            html.AppendLine("<div class=\"panel-heading\">");
+            html.AppendLine("<h3>Summary</h3>");
+            if (summery == null)
+                html.AppendLine(string.Format("<a>Test Assembly - <small>{0}</small></a>", testName));
+            else
+            {
+                var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(summery);
+                foreach(KeyValuePair<string,string> kv in dict)
+                {
+                    html.AppendLine(string.Format("<a>{0} - <small>{1}</small></a>", kv.Key, kv.Value));
+                }
+            }
+            html.AppendLine("</div>");
             html.AppendLine("<div class=\"panel-body\">");
 
             html.AppendLine(string.Format("<div class=\"col-md-2 col-sm-4 col-xs-6 text-center\"><div class=\"stat\">Tests</div><div class=\"val ignore-val\">{0}</div></div>", testTests));

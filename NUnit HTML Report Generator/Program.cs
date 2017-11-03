@@ -45,19 +45,9 @@ namespace Jatech.NUnit
         #region Private Constants
 
         /// <summary>
-        /// Usage example.
-        /// </summary>
-        private const string Usage = "Usage: NUnitHTMLReportGenerator.exe [input-path] [output-path]";
-
-        /// <summary>
         /// Regular expression for acceptable characters in html id.
         /// </summary>
         private static readonly Regex Regex = new Regex("[^a-zA-Z0-9 -]");
-
-        /// <summary>
-        /// Switches for displaying the basic help when executed.
-        /// </summary>
-        private static readonly List<string> HelpParameters = new List<string>() { "?", "/?", "help" };
 
         #endregion
 
@@ -152,7 +142,7 @@ namespace Jatech.NUnit
                 var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(summery);
                 foreach(KeyValuePair<string,string> kv in dict)
                 {
-                    html.AppendLine(string.Format("<a>{0} - <small>{1}</small></a>", kv.Key, kv.Value));
+                    html.AppendLine(string.Format("<p>{0} - <small>{1}</small></p>", kv.Key, kv.Value));
                 }
             }
             html.AppendLine("</div>");

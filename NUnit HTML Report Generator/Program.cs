@@ -136,7 +136,7 @@ namespace Jatech.NUnit
             html.AppendLine("<div class=\"panel-heading\">");
             html.AppendLine("<h3>Summary</h3>");
             if (summery == null)
-                html.AppendLine(string.Format("<a>Test Assembly - <small>{0}</small></a>", testName));
+                html.AppendLine(string.Format("<p>Test Assembly - <small>{0}</small></p>", testName));
             else
             {
                 var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(summery);

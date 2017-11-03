@@ -134,15 +134,18 @@ namespace Jatech.NUnit
             html.AppendLine("<div class=\"col-md-12\">");
             html.AppendLine("<div class=\"panel panel-default\">");
             html.AppendLine("<div class=\"panel-heading\">");
-            html.AppendLine("<h3>Summary</h3>");
+
+            string style = "margin:0px;";
+            html.AppendLine(string.Format("<h4 style={0}>Summary</h4>",style));
+
             if (summery == null)
-                html.AppendLine(string.Format("<p>Test Assembly - <small>{0}</small></p>", testName));
+                html.AppendLine(string.Format("<p style={1}>Test Assembly - <small>{0}</small></p>", testName,style));
             else
             {
                 var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(summery);
                 foreach(KeyValuePair<string,string> kv in dict)
                 {
-                    html.AppendLine(string.Format("<p>{0} - <small>{1}</small></p>", kv.Key, kv.Value));
+                    html.AppendLine(string.Format("<p style={2}>{0} - <small>{1}</small></p>", kv.Key, kv.Value,style));
                 }
             }
             html.AppendLine("</div>");

@@ -1,4 +1,4 @@
-NUnit HTML Report maker
+NUnit HTML Report Maker
 ===========================
 This project is used to convert NUnit (V2) generated XML result files into a self-contained Bootstrap 3 based HTML page. The page is designed to be responsive and viewable on mobile and desktop. It has been tested on Windows 8 under Chrome and IE and Chrome for Android.
 
